@@ -15,6 +15,7 @@ def get_chromsizes(species, chromsizes=None, cannonical=True):
     snames = [sp.split(".")[0] for sp in os.listdir(csizes)]
     if chromsizes is not None:
         csdf = pd.read_csv(chromsizes, sep='\t', header=None)
+        # filter cannonical by default for now
         csdf = filter_cannonical(csdf)
         csdict = pd.Series(csdf[1].values, index=csdf[0]).to_dict() 
     elif species not in snames:
