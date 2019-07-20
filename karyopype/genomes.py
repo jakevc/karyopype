@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
+
 def filter_cannonical(df):
     """Retains only cannonical chromosomes in first column."""
     df = df[df.loc[:,0].str.match("chr[0-9|X|Y]+[a|b]?$")]

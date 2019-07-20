@@ -173,4 +173,3 @@ class Karyopype:
 kp = Karyopype("hg19")
 print(kp.chromsizes)
 kp.plot_chromosomes()
-
