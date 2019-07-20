@@ -3,7 +3,7 @@ from pathlib import Path
 from setuptools import setup
 from setuptools import find_packages
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 
 HERE = Path(__file__).parent
 
@@ -25,6 +25,8 @@ setup(
     include_package_data=True,
     version=__version__,
     description="Chromosomal visualization in Python.",
+    long_description=README,
+    long_description_content_type='text/markdown',
     author="Jake VanCampen",
     author_email="jake.vancampen7@gmail.com",
     url="http://github.com/jakevc/karyopype",
@@ -41,4 +43,4 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Topic :: Scientific/Engineering"
     ],
-    long_description=README
+)
