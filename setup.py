@@ -15,7 +15,7 @@ install_requires = [
 
 setup(
     name="karyopype",
-    packages=find_packages(),
+    packages=find_packages(exclude=("tests",)),
     package_data={
         'karyopype': [
             'data/*.chrom.sizes'
