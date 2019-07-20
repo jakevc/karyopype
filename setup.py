@@ -1,11 +1,11 @@
 import os
-import pathlib
+from pathlib import Path
 from setuptools import setup
 from setuptools import find_packages
 
 __version__ = "0.0.1"
 
-HERE = pathlib.Path(__file__).parent
+HERE = Path(__file__).parent
 
 README = (HERE / "README.md").read_text()
 
@@ -22,6 +22,7 @@ setup(
         ]
     },
     include_dirs=["."],
+    include_package_data=True,
     version=__version__,
     description="Chromosomal visualization in Python.",
     author="Jake VanCampen",
@@ -40,4 +41,4 @@ setup(
         "Operating System :: MacOS :: MacOS X",
         "Topic :: Scientific/Engineering"
     ],
-    long_description=("Python package to view and compare chromosomal regions on chromosomes for multiple species."))
+    long_description=README

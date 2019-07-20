@@ -1,5 +1,10 @@
+// {
+//     "python.pythonPath": "/home/groups/hoolock/u1/jvc/miniconda3/envs/karyopype/bin/python".,
+//     "python.autoComplete.extraPaths": ["/home/groups/hoolock/u1/jvc/miniconda3/envs/karyopype/"], 
+//     "python.autoComplete.addBrackets": true,
+/// {
 {
-    "python.pythonPath": "/home/groups/hoolock/u1/jvc/miniconda3/envs/karyopype/bin/python".,
-    "python.autoComplete.extraPaths": ["/home/groups/hoolock/u1/jvc/miniconda3/envs/karyopype/"], 
+    "python.pythonPath": "/Users/vancampe/miniconda3/envs/karyopype/bin/python",
+    "python.autoComplete.extraPaths": ["/Users/vancampe/karyopype"], 
     "python.autoComplete.addBrackets": true,
 }
