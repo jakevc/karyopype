@@ -16,7 +16,6 @@ setup(
             'data/*.chrom.sizes'
         ]
     },
-    # data_files = ["LICENSE"],
     include_dirs=["."],
     version=__version__,
     description="Chromosomal visualization in Python.",

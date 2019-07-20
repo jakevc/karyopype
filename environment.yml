@@ -1,7 +1,10 @@
+name:
+    - karyopype
 channels:
-  - conda-forge
-  - bioconda
-  - defaults 
+    - conda-forge
+    - bioconda
+    - defaults 
 dependencies:
-  - matplotlib
-  - pandas
+    - matplotlib
+    - pandas
+
