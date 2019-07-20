@@ -1,8 +1,13 @@
 import os
-from distutils.core import setup
+import pathlib
+from setuptools import setup
 from setuptools import find_packages
 
 __version__ = "0.0.1"
+
+HERE = pathlib.Path(__file__).parent
+
+README = (HERE / "README.md").read_text()
 
 install_requires = [
     "matplotlib", "pandas", "numpy",

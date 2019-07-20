@@ -1,6 +1,3 @@
-import genomes as gn
-import pytest
-
 def test_get_chromosomes_hg38():
     cs = gn.get_chromsizes("hg38")
     assert len(cs.keys()) == 24
