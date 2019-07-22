@@ -7,7 +7,8 @@ Karyopype is a simple chromosome plotting package in python allowing you to quic
 
 ```
 import karyopype
-kp = Karyopype("hg38")
-kp.add_regions(regions_bed_df)
-kp.plot_chromosomes()
+
+plot_chromosomes("hg38", "/path/to/regions.bed")
 ```
+
+![](data/hg38_karyopype.png)
