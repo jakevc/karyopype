@@ -7,4 +7,7 @@
     "python.pythonPath": "/Users/vancampe/miniconda3/envs/karyopype/bin/python",
     "python.autoComplete.extraPaths": ["/Users/vancampe/karyopype"], 
     "python.autoComplete.addBrackets": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "editor.rulers": [79,120]
 }
