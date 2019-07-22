@@ -22,7 +22,7 @@ def get_chromsizes(species, chromsizes=None, cannonical=True):
         raise TypeError("Species name should be a string, e.g 'hg38'")
 
     # extract species name from available files
-    csizes = Path("data/chromsizes")
+    csizes = Path("data/chromsizes/")
     snames = [sp.split(".")[0] for sp in os.listdir(csizes)]
     if chromsizes is not None:
         csdf = pd.read_csv(chromsizes, sep='\t', header=None)
@@ -163,7 +163,7 @@ def plot_karyopype(species, regions=None, savefig=False):
         - species:
             The name of the species chromosomes to plot, e.g. 'hg38', 'nomLeu3'
         - regions:
-            A bedlike file or dataframe with at least chromosome, start, end.
+            A bedlike file or dataframe with at least chr, start, end.
         - savefig:
             Saves the chromosome plot to a file.
     """
@@ -184,7 +184,7 @@ def plot_karyopype(species, regions=None, savefig=False):
     ax.set_title(f"{species} Karyopype", fontsize=14)
     plt.xlabel('Chromosome Position (Mbp)', fontsize=14)
     plt.ylabel(f'{species} Chromosome', fontsize=14)
-    plt.show()
+    if savefig is True:
+        plt.savefig(f'{species}_karyopype.png')
 
-    if savefig:
-        plt.savefig(f"{species}karyopype_.png")
+    return(plt)
