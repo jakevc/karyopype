@@ -1,12 +1,9 @@
 import pathlib
-import pkg_resources
 
-# import matplotlib._color_data as mcd
-# import matplotlib.patches as mpatch
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.collections import BrokenBarHCollection
-from pkg_resources import resource_listdir, resource_filename
+from pkg_resources import resource_filename, resource_listdir
 
 
 def filter_cannonical(df):
@@ -16,7 +13,7 @@ def filter_cannonical(df):
 
 
 def list_species():
-    data_files = pkg_resources.resource_listdir(__name__, 'data/chromsizes/')
+    data_files = resource_listdir(__name__, 'data/chromsizes/')
     splist = [sp.split('.')[0] for sp in data_files]
     print(splist)
     return(splist)
@@ -29,7 +26,7 @@ def get_chromsizes(species, chromsizes=None, cannonical=True):
         raise TypeError("Species name should be a string, e.g 'hg38'")
 
     # fetch the pkg chromsizes data
-    data_files = pkg_resources.resource_listdir(__name__, 'data/chromsizes/')
+    data_files = resource_listdir(__name__, 'data/chromsizes/')
     snames = [sp.split('.')[0] for sp in data_files]
 
     if chromsizes is not None:
@@ -150,15 +147,39 @@ def add_regions(ax, chromsizes, regions=None):
             ideo, chrom_ybase, chrom_height, edgecolor='k'):
         ax.add_collection(collection)
 
-    # determine if there is a dataframe of other bed regions
-    rdf, skip = parse_regions(regions)
+    if regions is None:
+        print("No additional regions.")
+    elif isinstance(regions, str):
+        # add single region as green regions
+        rdf, skip = parse_regions(regions)
+        color = 'C2'
+        if skip is False:
+            print("Writing additional regions to axis.")
+            rdf['colors'] = color
+            for collection in chromosome_collections(
+                    rdf, chrom_ybase, chrom_height,
+                    edgecolor=color, label=f"regions1"):
+                ax.add_collection(collection)
 
-    if not skip:
-        print("Writing additional regions to axis.")
-        rdf['colors'] = 'red'
-        for collection in chromosome_collections(
-                rdf, chrom_ybase, chrom_height, edgecolor='red'):
-            ax.add_collection(collection)
+    else:
+        for i, r in enumerate(regions):
+            print(r)
+            color = f'C{i}'
+
+            # determine if there is a dataframe of other bed regions
+            rdf, skip = parse_regions(r)
+            print(skip)
+
+            if skip is False:
+                print(f"Writing additional regions to axis {r}")
+                rdf['colors'] = color
+                for collection in chromosome_collections(
+                        rdf, chrom_ybase, chrom_height,
+                        edgecolor=color, label=f"regions{i}"):
+                    ax.add_collection(collection)
+
+                print("Now what")
+            print(r[i])
 
     # add to ax
     ax.set_yticks([chrom_centers[i] for i in chromosome_list])
@@ -167,7 +188,9 @@ def add_regions(ax, chromsizes, regions=None):
     return(ax)
 
 
-def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
+def plot_karyopype(species, regions=None,
+                   chromsizes=None, savefig=False,
+                   figsize=(10, 7)):
     """
     Plot karyopype of the genome of interest,
     along with an extra set of genomic regions or a list of genomic regions.
@@ -177,7 +200,7 @@ def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
             Return regions file if any, skip is True if None.
             If not available in: karyopype.list_species().
         - regions:
-            A dataframe or file with "chr, start, end" as first three columns.
+            A dataframe, file or list with "chr, start, end" as first three columns.
         - savefig:
             Saves the chromosome plot to a file.
     """
@@ -185,7 +208,6 @@ def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
     chromsizes = get_chromsizes(species, chromsizes)
 
     # initialize a figure/
-    figsize = (7, 5)
     fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     # add regions to the axis
@@ -198,6 +220,7 @@ def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
     ax.set_title(f"{species} Karyopype", fontsize=14)
     plt.xlabel('Chromosome Position (Mbp)', fontsize=14)
     plt.ylabel(f'{species} Chromosome', fontsize=14)
+    plt.legend(loc='upper right')
     if savefig is True:
         plt.savefig(f'{species}_karyopype.png')
 

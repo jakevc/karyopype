@@ -55,5 +55,14 @@ def test_parse_regions_df():
 
 
 def test_list_species():
-    known = ["gorGor3", "hg19", "hg38", "mm10", "nomLeu3", "panTro4", "rheMac8"]
+    known = [
+            "gorGor3", "hg19", "hg38", "mm10", "nomLeu3", "panTro4", "rheMac8"
+            ]
     assert set(kp.list_species()) == set(known)
+
+
+def test_multiregions():
+    r1 = resource_filename(__name__, 'data/testRegions/regions.bed')
+    r2 = resource_filename(__name__, 'data/testRegions/regions2.bed')
+    a = kp.plot_karyopype("hg19", regions=[r1, r2])
+    assert a.__name__  == 'matplotlib.pyplot'
