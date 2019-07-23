@@ -54,7 +54,6 @@ def parse_regions(regions=None):
             and isinstance(regions, str)
             or isinstance(regions, pathlib.PosixPath)):
         regions = pd.read_csv(regions, sep=' ', header=None).iloc[:, 0:3]
-        print(regions)
         regions.columns = ["chrom", "start", "end"]
         skip = False
     elif isinstance(regions, pd.DataFrame):
@@ -163,23 +162,15 @@ def add_regions(ax, chromsizes, regions=None):
 
     else:
         for i, r in enumerate(regions):
-            print(r)
             color = f'C{i}'
-
             # determine if there is a dataframe of other bed regions
             rdf, skip = parse_regions(r)
-            print(skip)
-
             if skip is False:
-                print(f"Writing additional regions to axis {r}")
                 rdf['colors'] = color
                 for collection in chromosome_collections(
                         rdf, chrom_ybase, chrom_height,
                         edgecolor=color, label=f"regions{i}"):
                     ax.add_collection(collection)
-
-                print("Now what")
-            print(r[i])
 
     # add to ax
     ax.set_yticks([chrom_centers[i] for i in chromosome_list])
