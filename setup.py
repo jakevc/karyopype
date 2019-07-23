@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from setuptools import setup
 from setuptools import find_packages
@@ -16,13 +15,12 @@ install_requires = [
 setup(
     name="karyopype",
     packages=find_packages(exclude=("tests",)),
+    package_dir={__name__: __name__},
     package_data={
-        'karyopype': [
-            'data/*.chrom.sizes'
-        ]
+        'karyopype': ['data/chromsizes/*.chrom.sizes']
     },
     include_dirs=["."],
-    include_package_data=True,
+    # include_package_data=True,
     version=__version__,
     description="Chromosomal visualization in Python.",
     long_description=README,

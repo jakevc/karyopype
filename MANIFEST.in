@@ -1,1 +1,1 @@
-include data/*.chrom.sizes
+recursive-include data/chromsizes *
