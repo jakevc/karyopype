@@ -43,3 +43,17 @@ def test_parse_regions_Path():
     p = kp.parse_regions(dfile)
     assert isinstance(p[0], pd.DataFrame)
     assert p[1] is False
+
+
+def test_parse_regions_df():
+    dat = resource_filename(__name__, 'data/testRegions/regions.bed')
+    datdf = pd.read_csv(dat, sep=' ', header=None)
+    # test truncation of unncesessary columns
+    datdf['extra'] = 'extra'
+    p = kp.parse_regions(datdf)
+    assert list(p[0].columns) == ['chrom', 'start', 'end']
+
+
+def test_list_species():
+    known = ["gorGor3", "hg19", "hg38", "mm10", "nomLeu3", "panTro4", "rheMac8"]
+    assert set(kp.list_species()) == set(known)

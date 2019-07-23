@@ -15,6 +15,13 @@ def filter_cannonical(df):
     return df
 
 
+def list_species():
+    data_files = pkg_resources.resource_listdir(__name__, 'data/chromsizes/')
+    splist = [sp.split('.')[0] for sp in data_files]
+    print(splist)
+    return(splist)
+
+
 def get_chromsizes(species, chromsizes=None, cannonical=True):
     """Return chromsizes dict for speceis."""
     # check that species is a string
@@ -49,11 +56,12 @@ def parse_regions(regions=None):
     if (regions is not None
             and isinstance(regions, str)
             or isinstance(regions, pathlib.PosixPath)):
-        regions = pd.read_csv(regions, sep=' ', header=None)
+        regions = pd.read_csv(regions, sep=' ', header=None).iloc[:, 0:3]
+        print(regions)
         regions.columns = ["chrom", "start", "end"]
         skip = False
     elif isinstance(regions, pd.DataFrame):
-        regions = regions
+        regions = regions.iloc[:, 0:3]
         # add expected columns to reigons
         regions.columns = ["chrom", "start", "end"]
         skip = False
@@ -166,10 +174,10 @@ def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
         - species:
             The name of the species chromosomes to plot, e.g. 'hg38', 'nomLeu3'
         - chromsizes:
-            Path tReturn regions file if any, skip is True if None. for species, if not available in:
-            karyopype.list_species()
+            Return regions file if any, skip is True if None.
+            If not available in: karyopype.list_species().
         - regions:
-            A bedlike file or dataframe with at least chr, start, end.
+            A dataframe or file with "chr, start, end" as first three columns.
         - savefig:
             Saves the chromosome plot to a file.
     """
