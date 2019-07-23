@@ -13,7 +13,7 @@ import karyopype.karyopype as kp
 kp.plot_karyopype("hg38", "/path/to/regions.bed")
 ```
 
-![](data/hg38_karyopype.png)
+![](karyopype/data/hg38_karyopype.png)
 
 From a command line session
 ```python
