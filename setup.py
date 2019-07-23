@@ -2,7 +2,7 @@ from pathlib import Path
 from setuptools import setup
 from setuptools import find_packages
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 HERE = Path(__file__).parent
 
@@ -20,7 +20,7 @@ setup(
         'karyopype': ['data/chromsizes/*.chrom.sizes']
     },
     include_dirs=["."],
-    # include_package_data=True,
+    include_package_data=True,
     version=__version__,
     description="Chromosomal visualization in Python.",
     long_description=README,

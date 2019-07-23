@@ -9,6 +9,6 @@
 
 __pycache__
 
-.vscode
+*.vscode
 
 .notes

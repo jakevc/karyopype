@@ -1,1 +1,1 @@
-recursive-include data/chromsizes *
+include data/chromsizes/*

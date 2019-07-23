@@ -1,39 +1,41 @@
-import os
-from pathlib import Path
 import pathlib
+import pkg_resources
 
 # import matplotlib._color_data as mcd
 # import matplotlib.patches as mpatch
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.collections import BrokenBarHCollection
+from pkg_resources import resource_listdir, resource_filename
 
 
 def filter_cannonical(df):
-    """Retains only cannonical chromosomes in first column."""
+    """Retains only cannonical chromosomes in bed-like df."""
     df = df[df.loc[:, 0].str.match("chr[0-9|X|Y]+[a|b]?$")]
     return df
 
 
 def get_chromsizes(species, chromsizes=None, cannonical=True):
-    """Get chromsizes file for species."""
+    """Return chromsizes dict for speceis."""
     # check that species is a string
     if not isinstance(species, str):
         raise TypeError("Species name should be a string, e.g 'hg38'")
 
-    # extract species name from available files
-    csizes = Path("data/chromsizes/")
-    snames = [sp.split(".")[0] for sp in os.listdir(csizes)]
+    # fetch the pkg chromsizes data
+    data_files = pkg_resources.resource_listdir(__name__, 'data/chromsizes/')
+    snames = [sp.split('.')[0] for sp in data_files]
+
     if chromsizes is not None:
         csdf = pd.read_csv(chromsizes, sep='\t', header=None)
         # filter cannonical by default for now
         csdf = filter_cannonical(csdf)
         csdict = pd.Series(csdf[1].values, index=csdf[0]).to_dict()
     elif species not in snames:
-        raise Exception("Species not yet supported,\
-            please provide a chromsizes file.")
+        raise Exception(
+            "Species not yet supported, please provide a chromsizes file.")
     else:
-        csfile = csizes / f"{species}.chrom.sizes"
+        csname = [s for s in data_files if species in s][0]
+        csfile = resource_filename(__name__, f'data/chromsizes/{csname}')
         csdf = pd.read_csv(csfile, sep='\t', header=None)
         csdf = filter_cannonical(csdf)
         csdict = pd.Series(csdf[1].values, index=csdf[0]).to_dict()
@@ -42,6 +44,7 @@ def get_chromsizes(species, chromsizes=None, cannonical=True):
 
 
 def parse_regions(regions=None):
+    """Return regions file if any, skip is True if None."""
     # determine if there is a dataframe of other bed regions
     if (regions is not None
             and isinstance(regions, str)
@@ -61,7 +64,7 @@ def parse_regions(regions=None):
 
 
 def add_chromsize_colors(sizes_dict, color):
-    """Add matplotlib color to chromsizes dict"""
+    """Add matplotlib color to chromsizes dict."""
     for k in sizes_dict:
         sizes_dict[k] = (sizes_dict[k], color)
     return(sizes_dict)
@@ -156,19 +159,22 @@ def add_regions(ax, chromsizes, regions=None):
     return(ax)
 
 
-def plot_karyopype(species, regions=None, savefig=False):
+def plot_karyopype(species, regions=None, chromsizes=None, savefig=False):
     """
     Plot karyopype of the genome of interest,
     along with an extra set of genomic regions or a list of genomic regions.
         - species:
             The name of the species chromosomes to plot, e.g. 'hg38', 'nomLeu3'
+        - chromsizes:
+            Path tReturn regions file if any, skip is True if None. for species, if not available in:
+            karyopype.list_species()
         - regions:
             A bedlike file or dataframe with at least chr, start, end.
         - savefig:
             Saves the chromosome plot to a file.
     """
     # call chromsizes
-    chromsizes = get_chromsizes(species)
+    chromsizes = get_chromsizes(species, chromsizes)
 
     # initialize a figure/
     figsize = (7, 5)
