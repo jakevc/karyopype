@@ -10,10 +10,11 @@ From an interactive python session (jupyter notebook):
 pip install karyopype
 import karyopype.karyopype as kp
 
-kp.plot_karyopype("hg38", "/path/to/regions.bed")
+# plot two sets of regions
+kp.plot_karyopype("hg38", ["/path/to/regions.bed", "/path/to/regions2.bed"])
 ```
 
-![](karyopype/data/hg38_karyopype.png)
+![](karyopype/data/hg19_karyopype.png)
 
 From a command line session
 ```python

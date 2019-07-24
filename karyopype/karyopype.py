@@ -231,4 +231,4 @@ def plot_karyopype(species, regions=None,
     if savefig is True:
         plt.savefig(f'{species}_karyopype.png')
 
-    return(plt, ax)
+    return(plt)
