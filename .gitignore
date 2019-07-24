@@ -12,3 +12,7 @@ __pycache__
 *.vscode
 
 .notes
+
+# python notebooks
+.ipython_checkpoints/
+*.ipynb
