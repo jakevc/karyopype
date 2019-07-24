@@ -3,6 +3,7 @@ import pathlib
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.collections import BrokenBarHCollection
+from matplotlib.lines import Line2D
 from pkg_resources import resource_filename, resource_listdir
 
 
@@ -145,36 +146,52 @@ def add_regions(ax, chromsizes, regions=None):
     for collection in chromosome_collections(
             ideo, chrom_ybase, chrom_height, edgecolor='k'):
         ax.add_collection(collection)
+    
+    # legend
+    leg = []
+    leg_lab = []
 
     if regions is None:
         print("No additional regions.")
     elif isinstance(regions, str):
         # add single region as green regions
         rdf, skip = parse_regions(regions)
-        color = 'C2'
+        color = 'C1'
         if skip is False:
             print("Writing additional regions to axis.")
             rdf['colors'] = color
+
+            # add legend parts
+            leg.append(Line2D([0], [0], color=color, lw=4))
+            leg_lab.append("regions1")
+
             for collection in chromosome_collections(
                     rdf, chrom_ybase, chrom_height,
-                    edgecolor=color, label=f"regions1"):
+                    edgecolor=color):
                 ax.add_collection(collection)
 
     else:
         for i, r in enumerate(regions):
             color = f'C{i}'
+
+            # add legend element per regions
+            leg_lab.append(f"regions{i+1}")
+            leg.append(Line2D([0], [0], color=color, lw=4))
+
             # determine if there is a dataframe of other bed regions
             rdf, skip = parse_regions(r)
             if skip is False:
                 rdf['colors'] = color
                 for collection in chromosome_collections(
                         rdf, chrom_ybase, chrom_height,
-                        edgecolor=color, label=f"regions{i}"):
+                        edgecolor=color):
                     ax.add_collection(collection)
 
     # add to ax
     ax.set_yticks([chrom_centers[i] for i in chromosome_list])
     ax.set_yticklabels(chromosome_list)
+
+    ax.legend(leg, leg_lab, loc=4)
     ax.axis("tight")
     return(ax)
 
@@ -211,8 +228,7 @@ def plot_karyopype(species, regions=None,
     ax.set_title(f"{species} Karyopype", fontsize=14)
     plt.xlabel('Chromosome Position (Mbp)', fontsize=14)
     plt.ylabel(f'{species} Chromosome', fontsize=14)
-    plt.legend(loc='upper right')
     if savefig is True:
         plt.savefig(f'{species}_karyopype.png')
 
-    return(plt)
+    return(plt, ax)
