@@ -1,5 +1,5 @@
 import pathlib
-
+from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.collections import BrokenBarHCollection
