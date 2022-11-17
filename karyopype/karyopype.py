@@ -179,7 +179,7 @@ def add_regions(ax, chromsizes, regions=None,sep:Optional='\t'):
             leg.append(Line2D([0], [0], color=color, lw=4))
 
             # determine if there is a dataframe of other bed regions
-            rdf, skip = parse_regions(r)
+            rdf, skip = parse_regions(r,sep=sep)
             if skip is False:
                 rdf['colors'] = color
                 for collection in chromosome_collections(
@@ -198,7 +198,7 @@ def add_regions(ax, chromsizes, regions=None,sep:Optional='\t'):
 
 def plot_karyopype(species, regions=None,
                    chromsizes=None, savefig=False,
-                   figsize=(10, 7)):
+                   figsize=(10, 7), sep:Optional='\t'):
     """
     Plot karyopype of the genome of interest,
     along with an extra set of genomic regions or a list of genomic regions.
@@ -219,7 +219,7 @@ def plot_karyopype(species, regions=None,
     fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     # add regions to the axis
-    add_regions(ax=ax, chromsizes=chromsizes, regions=regions)
+    add_regions(ax=ax, chromsizes=chromsizes, regions=regions, sep=sep)
 
     # xtick formatting: position in Mbps
     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, n: int(x/1e6)))
