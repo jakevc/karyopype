@@ -1,5 +1,5 @@
 import pathlib
-
+from typing import Optional
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.collections import BrokenBarHCollection
@@ -48,13 +48,13 @@ def get_chromsizes(species, chromsizes=None, cannonical=True):
     return(csdict)
 
 
-def parse_regions(regions=None):
+def parse_regions(regions=None,sep:Optional='\t'):
     """Return regions file if any, skip is True if None."""
     # determine if there is a dataframe of other bed regions
     if (regions is not None
             and isinstance(regions, str)
             or isinstance(regions, pathlib.PosixPath)):
-        regions = pd.read_csv(regions, sep=' ', header=None).iloc[:, 0:3]
+        regions = pd.read_csv(regions, sep=sep, header=None).iloc[:, 0:3]
         regions.columns = ["chrom", "start", "end"]
         skip = False
     elif isinstance(regions, pd.DataFrame):
@@ -106,7 +106,7 @@ def chromosome_collections(df, y_positions, height, **kwargs):
         del df['width']
 
 
-def add_regions(ax, chromsizes, regions=None):
+def add_regions(ax, chromsizes, regions=None,sep:Optional='\t'):
     """Add Chromosome breakpoints plot to axis."""
 
     chromsize_colors = add_chromsize_colors(chromsizes, color="whitesmoke")
@@ -155,7 +155,7 @@ def add_regions(ax, chromsizes, regions=None):
         print("No additional regions.")
     elif isinstance(regions, str):
         # add single region as green regions
-        rdf, skip = parse_regions(regions)
+        rdf, skip = parse_regions(regions,sep=sep)
         color = 'C1'
         if skip is False:
             print("Writing additional regions to axis.")
@@ -179,7 +179,7 @@ def add_regions(ax, chromsizes, regions=None):
             leg.append(Line2D([0], [0], color=color, lw=4))
 
             # determine if there is a dataframe of other bed regions
-            rdf, skip = parse_regions(r)
+            rdf, skip = parse_regions(r,sep=sep)
             if skip is False:
                 rdf['colors'] = color
                 for collection in chromosome_collections(
@@ -198,7 +198,7 @@ def add_regions(ax, chromsizes, regions=None):
 
 def plot_karyopype(species, regions=None,
                    chromsizes=None, savefig=False,
-                   figsize=(10, 7)):
+                   figsize=(10, 7), sep:Optional='\t'):
     """
     Plot karyopype of the genome of interest,
     along with an extra set of genomic regions or a list of genomic regions.
@@ -219,7 +219,7 @@ def plot_karyopype(species, regions=None,
     fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     # add regions to the axis
-    add_regions(ax=ax, chromsizes=chromsizes, regions=regions)
+    add_regions(ax=ax, chromsizes=chromsizes, regions=regions, sep=sep)
 
     # xtick formatting: position in Mbps
     ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda x, n: int(x/1e6)))
